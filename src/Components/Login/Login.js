@@ -30,11 +30,15 @@ export default function Login() {
   const addUser = async (userID) => {
     const userRef = doc(db, "users", userID);
     return await setDoc(userRef, {
-      id: userID
+      id: userID,
+      username: "",
+      fullname: "",
+      avatar: "",
+      createUser: false,
     });
   }
 
-  return <div className="login h-full flex items-center justify-center items-center">
+  return <div className="login h-full flex justify-center items-center">
     <div className="login__google flex cursor-pointer flex-col w-80 h-80 items-center justify-center bg-white rounded-md" onClick={handleOnClick}>
       <h1 className="text-2xl mb-[10px]" >Sign Up Using Google</h1>
       <IconContext.Provider value={{ style: { height: '100px', width: '100px' } }} >

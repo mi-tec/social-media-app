@@ -7,7 +7,6 @@ export default function VerifyLoggedIn() {
 
   useEffect(() => {
     const cuser = onAuthStateChanged(auth, user => {
-      console.log(user);
       setCurrentuser(user);
     })
     return cuser;
