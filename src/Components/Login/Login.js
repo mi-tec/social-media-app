@@ -10,6 +10,8 @@ import VerifyLoggedIn from "../../VerifyUser";
 
 import { collection, getDocs, doc, query, where, serverTimestamp, setDoc } from "firebase/firestore";
 
+import './Login.scss';
+
 export default function Login() {
   const currentUser = VerifyLoggedIn();
   const navigate = useNavigate();
@@ -63,7 +65,7 @@ export default function Login() {
     });
   }
 
-  return <div className="login h-full flex justify-center items-center">
+  return <div className="login flex justify-center items-center">
     <div className="login__google flex cursor-pointer flex-col w-72 md:w-80 h-72 md:h-80 items-center justify-center bg-white rounded-md" onClick={handleOnClick}>
       <h1 className="text-2xl mb-[10px]" >Sign Up Using Google</h1>
       <IconContext.Provider value={{ style: { height: '100px', width: '100px' } }} >
