@@ -6,7 +6,7 @@ import PrivateRoutes from './PrivateRoutes';
 import Login from './Components/Login/Login';
 
 import Header from './Components/Header/Header';
-
+import Spinner from './Components/Spinner/Spinner';
 import CreateUser from './Components/CreateUser/CreateUser';
 import Home from './Components/Home/Home';
 import NotFound from './Components/NotFound/NotFound';
@@ -22,6 +22,7 @@ function App() {
 
   const [bgcolor, setBgColor] = useState("");
   const [txtcolor, setTxtcolor] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (locationPath === '/') {
@@ -31,23 +32,35 @@ function App() {
       setTxtcolor('text-white');
       setBgColor('bg-gray-900');
     }
+
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
   }, [locationPath]);
+
+  const setPreloader = (value) => {
+    setLoading(true);
+  }
 
   if (currentUser === undefined) return null;
 
   return (
     <div className={`App min-h-full h-full ${bgcolor} ${txtcolor}`}>
+      {loading && <Spinner />}
       {currentUser && <Header />}
       <div className={`App__body h-full ${currentUser ? 'pt-[65px]' : ''} `}>
         <Routes>
           <Route index element={<Login />} />
           <Route element={<PrivateRoutes />}>
             <Route path="home" element={<Home />} />
-            <Route path="create-user" element={<CreateUser />} />
+            <Route path="create-user" element={<CreateUser setPreloader={setPreloader} />} />
           </Route>
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
+      )
     </div>
   );
 }
