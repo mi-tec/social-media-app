@@ -14,7 +14,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="header bg-gray-600 p-4 fixed w-full border-b-indigo-500">
+      <div className="header bg-gray-600 p-4 fixed w-full border-b-indigo-500 z-[99]">
         <div className="header__links flex flex-row justify-between items-center">
           <span className="text-2xl font-bold cursor-pointer">Social Media App</span>
           <span className="header__links--profileicon" onClick={handleProfileIconClick}>
