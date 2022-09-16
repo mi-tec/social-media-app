@@ -19,6 +19,8 @@ function CreatePost({ data }) {
     setStatusImagePrev(null);
   };
 
+  console.log(statusimage);
+
   return (
     <div className="createpost absolute w-full mx-auto md:w-[700px] h-[420px] overflow-y-auto bg-gray-500 p-5 top-[65px] left-0 right-0 rounded-md">
       <div className="createpost__heading text-center p-3 mb-3 border-b-2 border-gray-400">
