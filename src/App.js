@@ -27,7 +27,7 @@ function App() {
       document.body.classList.add('bg-blue-700');
       document.body.classList.add('text-black');
     } else {
-      document.body.classList.add('bg-blue-700');
+      document.body.classList.add('bg-gray-700');
       document.body.classList.add('text-white');
     }
 
