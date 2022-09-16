@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { db, auth } from "../FireBaseConfig";
 
@@ -10,19 +10,21 @@ export const CurrentUserData = () => {
   const user = auth.currentUser;
 
   useEffect(() => {
-    async function fetchUserData(){
+    async function fetchUserData() {
       const docRef = doc(db, "users", user.uid);
-      await getDoc(docRef).then(res => {
-        setData(res.data());
-      }).catch(err => {
-        console.log(err);
-      })
+      await getDoc(docRef)
+        .then((res) => {
+          setData(res.data());
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
 
     fetchUserData();
   }, [user.uid]);
 
-  if ( data !== undefined){
+  if (data !== undefined) {
     return data;
   }
-}
+};
