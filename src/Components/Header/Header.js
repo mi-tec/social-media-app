@@ -16,6 +16,7 @@ export default function Header() {
   const [settingspopup, setSettingsPopup] = useState(false);
   const [createPostPopup, setCreatePostPopup] = useState(false);
 
+  const [userId, setUserId] = useState();
   const [fullname, setFullName] = useState();
   const [avatar, setAvatar] = useState();
 
@@ -27,8 +28,13 @@ export default function Header() {
     setCreatePostPopup((current) => !current);
   };
 
+  const setCloseCreatePost = (event) => {
+    setCreatePostPopup(event);
+  };
+
   useEffect(() => {
     if (userData !== undefined) {
+      setUserId(userData.id);
       setFullName(userData.fullname);
       setAvatar(userData.avatar);
     }
@@ -72,7 +78,12 @@ export default function Header() {
             </IconContext.Provider>
           </button>
         </div>
-        {createPostPopup && <CreatePost data={{ fullname, avatar }} />}
+        {createPostPopup && (
+          <CreatePost
+            data={{ userId, fullname, avatar }}
+            setCloseCreatePost={setCloseCreatePost}
+          />
+        )}
         {settingspopup && <SettingsPopup data={{ fullname, avatar }} />}
       </div>
     </>
