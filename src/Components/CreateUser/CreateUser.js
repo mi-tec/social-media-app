@@ -98,6 +98,7 @@ export default function CreateUser({ setPreloader }) {
               serverTimestamp()
             );
             setCreateSuccess(true);
+            window.scrollTo(0, 0);
             setPreloader(false);
             setTimeout(() => {
               navigate("/home");
