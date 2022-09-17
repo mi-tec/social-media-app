@@ -5,9 +5,23 @@ import uploadimage from "../../../images/uploadstatus.svg";
 import { IconContext } from "react-icons";
 import { FaWindowClose } from "react-icons/fa";
 
-function CreatePost({ data }) {
+import { db } from "../../../FireBaseConfig";
+
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+
+function CreatePost({ data, setCloseCreatePost }) {
   const [statusimage, setStatusImage] = useState();
   const [statusimageprev, setStatusImagePrev] = useState();
+  const [statusPosting, setStatusPosting] = useState(false);
+
+  const statusUserID = data.userId;
 
   const handleStatusImgUpload = (event) => {
     setStatusImage(event.target.files[0]);
@@ -19,7 +33,83 @@ function CreatePost({ data }) {
     setStatusImagePrev(null);
   };
 
-  console.log(statusimage);
+  const handleStatusOnSubmit = (event) => {
+    event.preventDefault();
+
+    if (statusimage || event.target.statustext.value) {
+      if (statusimage) {
+        const storage = getStorage();
+
+        const metadata = {
+          contentType: statusimage.type,
+        };
+
+        const imageRef = ref(
+          storage,
+          `/posts/${data.userId}/${statusimage.name}`
+        );
+
+        const uploadTask = uploadBytesResumable(
+          imageRef,
+          statusimage,
+          metadata
+        );
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {},
+          (error) => {
+            console.log(error);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              try {
+                addStatus(
+                  statusUserID,
+                  event.target.statustext.value,
+                  downloadURL,
+                  serverTimestamp()
+                );
+                setCloseCreatePost(false);
+                setStatusPosting((current) => !current);
+              } catch (err) {
+                console.log(err);
+              }
+            });
+          }
+        );
+      } else {
+        try {
+          addStatus(
+            statusUserID,
+            event.target.statustext.value,
+            "",
+            serverTimestamp()
+          );
+          setCloseCreatePost(false);
+          setStatusPosting((current) => !current);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    } else {
+      setStatusPosting((current) => !current);
+    }
+  };
+
+  const addStatus = async (userID, status, statusImage) => {
+    const statusReference = collection(db, "posts");
+
+    return await addDoc(statusReference, {
+      id: userID,
+      status: status,
+      statusImage: statusImage,
+      statusDate: serverTimestamp(),
+      likes: 0,
+    });
+  };
+
+  console.log(statusPosting);
 
   return (
     <div className="createpost absolute w-full mx-auto md:w-[700px] h-[420px] overflow-y-auto bg-gray-500 p-5 top-[65px] left-0 right-0 rounded-md">
@@ -37,7 +127,7 @@ function CreatePost({ data }) {
         </div>
       </div>
       <div>
-        <form>
+        <form onSubmit={handleStatusOnSubmit}>
           <div className="block">
             <textarea
               rows="4"
@@ -77,10 +167,17 @@ function CreatePost({ data }) {
                   <FaWindowClose />
                 </IconContext.Provider>
               </span>
-              <img src={statusimageprev} alt="" className="" />
+              <img src={statusimageprev} alt="" className="mx-auto" />
             </div>
           )}
-          <button className="w-full bg-gray-400 p-2 rounded-lg">Submit</button>
+          <button
+            className={`w-full bg-gray-400 p-2 rounded-lg ${
+              statusPosting && "disabled:opacity-25"
+            }`}
+            disabled={statusPosting}
+          >
+            {statusPosting ? "Posting" : "Post"}
+          </button>
         </form>
       </div>
     </div>
