@@ -18,6 +18,7 @@ export default function Home() {
     const getPosts = async () => {
       const q = query(collection(db, "posts"), orderBy("statusDate", "desc"));
 
+      // eslint-disable-next-line
       const unsubscribe = onSnapshot(q, async (querySnapshot) => {
         const posts = querySnapshot.docs.map((doc) => ({
           docid: doc.id,
@@ -45,7 +46,7 @@ export default function Home() {
         posts.forEach((item) => {
           posts_arr.push(
             <div
-              className="home__posts--post bg-slate-500 py-5 rounded-xl"
+              className="home__posts--post bg-slate-500 py-5 mb-8 rounded-xl"
               key={item.docid}
             >
               <div className="home__posts--post-user flex items-center px-5 pb-5">
@@ -71,8 +72,6 @@ export default function Home() {
         });
 
         setStatus(posts_arr);
-
-        unsubscribe();
       });
     };
 
@@ -81,7 +80,7 @@ export default function Home() {
 
   return (
     <div className="home p-4 max-w-screen-sm mx-auto">
-      <div className="home__posts flex flex-col gap-6">{status}</div>
+      <div className="home__posts flex flex-col ">{status}</div>
     </div>
   );
 }
