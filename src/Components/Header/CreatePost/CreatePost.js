@@ -71,6 +71,7 @@ function CreatePost({ data, setCloseCreatePost }) {
                   serverTimestamp()
                 );
                 setCloseCreatePost(false);
+                window.scrollTo(0, 0);
                 setStatusPosting((current) => !current);
               } catch (err) {
                 console.log(err);
@@ -87,6 +88,7 @@ function CreatePost({ data, setCloseCreatePost }) {
             serverTimestamp()
           );
           setCloseCreatePost(false);
+          window.scrollTo(0, 0);
           setStatusPosting((current) => !current);
         } catch (err) {
           console.log(err);
@@ -108,8 +110,6 @@ function CreatePost({ data, setCloseCreatePost }) {
       likes: 0,
     });
   };
-
-  console.log(statusPosting);
 
   return (
     <div className="createpost absolute w-full mx-auto md:w-[700px] h-[420px] overflow-y-auto bg-gray-500 p-5 top-[65px] left-0 right-0 rounded-md">
